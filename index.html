@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: black;
+    }
+
+    .matrix-column {
+      position: absolute;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      color: #00ff00;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()-_=+[{]}|;:,<.>/?~`';
+      const speed = 50; // milliseconds
+      const numColumns = 40; // Anzahl der Spalten
+      const columnWidth = window.innerWidth / numColumns;
+
+      // Erstelle leere Spalten
+      for (let i = 0; i < numColumns; i++) {
+        const column = document.createElement('div');
+        column.className = 'matrix-column';
+        column.style.left = i * columnWidth + 'px';
+        document.body.appendChild(column);
+      }
+
+      function createFallingChar() {
+        const columnIndex = Math.floor(Math.random() * numColumns);
+        const char = document.createElement('div');
+        char.textContent = characters.charAt(Math.floor(Math.random() * characters.length));
+        document.getElementsByClassName('matrix-column')[columnIndex].appendChild(char);
+
+        const animation = char.animate(
+          [
+            { transform: 'translateY(0)' },
+            { transform: 'translateY(' + window.innerHeight + 'px)' }
+          ],
+          {
+            duration: Math.random() * 2000 + 1000,
+            iterations: 1,
+            easing: 'linear',
+            fill: 'forwards'
+          }
+        );
+
+        animation.onfinish = function() {
+          char.parentNode.removeChild(char);
+        };
+      }
+
+      function startMatrixAnimation() {
+        setInterval(createFallingChar, speed);
+      }
+
+      startMatrixAnimation();
+    });
+  </script>
+</body>
+</html>
